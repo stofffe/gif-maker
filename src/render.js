@@ -11,8 +11,10 @@ up_down_min.value = 0.2
 up_down_max.value = 1.0
 
 let spin_opts = document.getElementById('spin_opts')
-let scale_input = document.getElementById('scale_input')
-scale_input.value = 1
+let scale_x = document.getElementById('scale_x')
+scale_x.value = 1
+let scale_y = document.getElementById('scale_y')
+scale_y.value = 1
 
 let scroll_opts = document.getElementById('scroll_opts')
 let scroll_direction = document.getElementById('scroll_dir')
@@ -26,16 +28,18 @@ let image_input = document.getElementById('image_input')
 
 let text_input_opts = document.getElementById('text_input_opts')
 let text_input = document.getElementById('text_input')
+text_input.value = 'hello'
 
 let frameRateInput = document.getElementById('frame_rate')
 frameRateInput.value = 60
 
 let saveInput = document.getElementById('save_gif')
 
-let image_source = null
-let default_img = null
-let text_source = null
-let font = null
+let font
+let tex
+let tex_w
+let tex_h
+let default_tex
 
 let dim_x = 200
 let dim_y = 200
@@ -43,7 +47,8 @@ let dim_y = 200
 // P5.js
 
 function preload() {
-    default_img = loadImage('https://pixijs.com/assets/bunny.png')
+    default_tex = loadImage('https://pixijs.com/assets/bunny.png')
+    load_default()
 
     font = loadFont('assets/font.ttf')
 }
@@ -56,14 +61,15 @@ function setup() {
 function draw() {
     background(255)
 
-    load_input()
     animate()
 
-    let s = Number(scale_input.value)
-    scale(s, s)
+    let sx = Number(scale_x.value)
+    let sy = Number(scale_y.value)
+    scale(sx, sy)
 
     noStroke()
-    plane(dim_x, dim_y)
+    texture(tex)
+    plane(tex_w, tex_h)
 }
 
 // Animations
@@ -118,33 +124,127 @@ function spin_animation() {
 }
 
 function scroll_animation() {
-    let start_offset = -width
-    let end_offset = width
-    let framerate = Number(frameRateInput.value)
-    let animation_speed = (end_offset - start_offset) / framerate
     let direction = scroll_direction.value
-    let dist = (frameCount * animation_speed) % (end_offset - start_offset)
-    switch (direction) {
-        case 'left':
-            let a = end_offset - dist
-            translate(a, 0)
-            break
-        case 'right':
-            let b = start_offset + dist
-            translate(b, 0)
-            break
-        case 'up':
-            let c = end_offset - dist
-            translate(0, c)
-            break
-        case 'down':
-            let d = start_offset + dist
-            translate(0, d)
-            break
+    let framerate = Number(frameRateInput.value)
+
+    if ((direction == 'left') | (direction == 'right')) {
+        let left = -width / 2 - tex_w / 2
+        let right = width / 2 + tex_w / 2
+        let animation_speed = (right - left) / framerate
+        let dist = (frameCount * animation_speed) % (right - left)
+
+        if (direction == 'left') {
+            translate(right - dist, 0)
+        } else {
+            translate(left + dist, 0)
+        }
+    }
+
+    if ((direction == 'up') | (direction == 'down')) {
+        let top = -height / 2 - tex_h / 2
+        let bottom = height / 2 + tex_h / 2
+        let animation_speed = (bottom - top) / framerate
+        let dist = (frameCount * animation_speed) % (bottom - top)
+
+        if (direction == 'up') {
+            translate(0, bottom - dist)
+        } else {
+            translate(0, top + dist)
+        }
     }
 }
 
-// Choose animation
+function load_text(txt) {
+    let fs = 52
+    // Get dimensions
+    textFont(font)
+    textSize(fs)
+    let text_w = textWidth(txt)
+    let text_h = textAscent()
+
+    // Create text texture
+    let t = createGraphics(tex_w, text_h)
+    t.background(128) // temp
+    t.textFont(font)
+    t.textSize(fs)
+    t.textAlign(CENTER)
+    t.text(txt, text_w / 2, text_h)
+
+    // Update state
+    tex = t
+    tex_w = text_w
+    tex_h = text_h
+}
+
+function load_default() {
+    tex = default_tex
+    tex_w = 200
+    tex_h = 200
+}
+
+function load_image(file) {
+    let reader = new FileReader()
+    reader.onload = function() {
+        let img = new Image()
+        img.src = reader.result
+        img.onload = function() {
+            tex = loadImage(img.src)
+            tex_w = img.width
+            tex_h = img.height
+        }
+    }
+    reader.readAsDataURL(file)
+}
+
+function save_gif() {
+    frameCount = 0
+    let frames = Number(frameRateInput.value)
+    let options = {
+        units: 'frames',
+        delay: 0,
+    }
+    saveGif('test', frames, options)
+}
+
+// Callbacks
+
+text_input.addEventListener('change', (e) => {
+    let txt = e.target.value
+    load_text(txt)
+})
+image_input.addEventListener('change', (e) => {
+    let files = e.target.files
+    if (files.length == 0) {
+        tex = null
+        return
+    }
+    load_image(files[0])
+})
+
+input_type_input.addEventListener('change', (e) => {
+    let input_type = e.target.value
+    image_input_opts.setAttribute('hidden', true)
+    text_input_opts.setAttribute('hidden', true)
+
+    switch (input_type) {
+        case 'image':
+            image_input_opts.removeAttribute('hidden')
+            let files = image_input.files
+            if (files.length > 0) {
+                load_image(files[0])
+            } else {
+                load_default()
+            }
+            break
+        case 'text':
+            text_input_opts.removeAttribute('hidden')
+            let txt = text_input.value
+            load_text(txt)
+            break
+        default:
+            console.error('invalid input type')
+    }
+})
 
 animation_input.addEventListener('change', (e) => {
     animation = e.target.value
@@ -171,76 +271,7 @@ animation_input.addEventListener('change', (e) => {
     }
 })
 
-// Input
-
-function load_input() {
-    let input_type = input_type_input.value
-    switch (input_type) {
-        case 'image':
-            texture(image_source ?? default_img)
-            break
-        case 'text':
-            texture(text_source ?? default_img)
-            break
-        default:
-            console.error('invalid input type')
-    }
-}
-
-function load_text(txt) {
-    let t = createGraphics(dim_x, dim_y)
-    let fs = 52
-    t.textFont(font)
-    t.textSize(fs)
-    t.textAlign(CENTER)
-    t.text(txt, dim_x / 2, dim_y / 2 + fs / 4)
-    text_source = t
-}
-text_input.addEventListener('change', (e) => {
-    let txt = e.target.value
-    load_text(txt)
-})
-
-function load_image(file) {
-    let reader = new FileReader()
-    reader.onload = () => {
-        image_source = loadImage(reader.result)
-    }
-    reader.readAsDataURL(file)
-}
-image_input.addEventListener('change', (e) => {
-    let files = e.target.files
-    if (files.length == 0) {
-        image_source = null
-        return
-    }
-    load_image(files[0])
-})
-
-input_type_input.addEventListener('change', (e) => {
-    let input_type = e.target.value
-    image_input_opts.setAttribute('hidden', true)
-    text_input_opts.setAttribute('hidden', true)
-
-    switch (input_type) {
-        case 'image':
-            image_input_opts.removeAttribute('hidden')
-            break
-        case 'text':
-            text_input_opts.removeAttribute('hidden')
-            break
-        default:
-            console.error('invalid input type')
-    }
-})
-
 // Record Gif
 saveInput.addEventListener('click', () => {
-    frameCount = 0
-    let frames = Number(frameRateInput.value)
-    let options = {
-        units: 'frames',
-        delay: 0,
-    }
-    saveGif('test', frames, options)
+    save_gif()
 })
