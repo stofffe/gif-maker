@@ -11,13 +11,14 @@ up_down_min.value = 0.2
 up_down_max.value = 1.0
 
 let spin_opts = document.getElementById('spin_opts')
-let scale_x = document.getElementById('scale_x')
-scale_x.value = 1
-let scale_y = document.getElementById('scale_y')
-scale_y.value = 1
 
 let scroll_opts = document.getElementById('scroll_opts')
 let scroll_direction = document.getElementById('scroll_dir')
+
+let global_scale_x = document.getElementById('global_scale_x')
+let global_scale_y = document.getElementById('global_scale_y')
+global_scale_x.value = 1
+global_scale_y.value = 1
 
 let animation_input = document.getElementById('animations')
 
@@ -35,12 +36,13 @@ frameRateInput.value = 60
 
 let saveInput = document.getElementById('save_gif')
 
-let font
 let tex
 let tex_w
 let tex_h
 let default_tex
+let font
 
+let canvas
 let dim_x = 200
 let dim_y = 200
 
@@ -54,7 +56,7 @@ function preload() {
 }
 
 function setup() {
-    let canvas = createCanvas(dim_x, dim_y, WEBGL)
+    canvas = createCanvas(dim_x, dim_y, WEBGL)
     canvas.parent('render_window')
 }
 
@@ -62,10 +64,7 @@ function draw() {
     background(255)
 
     animate()
-
-    let sx = Number(scale_x.value)
-    let sy = Number(scale_y.value)
-    scale(sx, sy)
+    scale(Number(global_scale_x.value), Number(global_scale_y.value))
 
     noStroke()
     texture(tex)
@@ -97,6 +96,7 @@ function animate() {
 function scale_animation() {
     let framerate = Number(frameRateInput.value)
     let animation_speed = (2 * PI) / framerate
+
     let min_size = Number(in_out_min.value)
     let max_size = Number(in_out_max.value)
     let diff = (max_size - min_size) / 2
@@ -107,6 +107,7 @@ function scale_animation() {
 function jump_animation() {
     let framerate = Number(frameRateInput.value)
     let animation_speed = (2 * PI) / framerate
+
     let min_size = Number(up_down_min.value)
     let max_size = Number(up_down_max.value)
     let diff = (max_size - min_size) / 2
@@ -119,6 +120,7 @@ function jump_animation() {
 function spin_animation() {
     let framerate = Number(frameRateInput.value)
     let animation_speed = (2 * PI) / framerate
+
     let angle = animation_speed * frameCount
     rotate(angle)
 }
@@ -128,8 +130,8 @@ function scroll_animation() {
     let framerate = Number(frameRateInput.value)
 
     if ((direction == 'left') | (direction == 'right')) {
-        let left = -width / 2 - tex_w / 2
-        let right = width / 2 + tex_w / 2
+        let left = -width / 2 - (tex_w * Number(global_scale_x.value)) / 2
+        let right = width / 2 + (tex_w * Number(global_scale_x.value)) / 2
         let animation_speed = (right - left) / framerate
         let dist = (frameCount * animation_speed) % (right - left)
 
@@ -141,8 +143,8 @@ function scroll_animation() {
     }
 
     if ((direction == 'up') | (direction == 'down')) {
-        let top = -height / 2 - tex_h / 2
-        let bottom = height / 2 + tex_h / 2
+        let top = -height / 2 - (tex_h * Number(global_scale_y.value)) / 2
+        let bottom = height / 2 + (tex_h * Number(global_scale_y.value)) / 2
         let animation_speed = (bottom - top) / framerate
         let dist = (frameCount * animation_speed) % (bottom - top)
 
@@ -208,7 +210,7 @@ function save_gif() {
 
 // Callbacks
 
-text_input.addEventListener('change', (e) => {
+text_input.addEventListener('keyup', (e) => {
     let txt = e.target.value
     load_text(txt)
 })
