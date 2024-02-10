@@ -8,20 +8,33 @@
 
 <body>
     <h1>Make them gifs</h1>
-    <h3>Options</h3>
+    <h3>Input</h3>
     <div>
-        <label for="input">Input</label>
-        <input id="input" type="file" accept="image/jpeg, image/png" />
+        <select id="input_type">
+            <option value="image">Image</option>
+            <option value="text">Text</option>
+        </select>
     </div>
+    <div id="image_input_opts">
+        <label for="image_input">Input</label>
+        <input id="image_input" type="file" accept="image/jpeg, image/png" />
+    </div>
+    <div id="text_input_opts" hidden>
+        <label for="text_input">Input</label>
+        <input id="text_input" type="text" />
+    </div>
+
+    <h3>Options</h3>
     <div>
         <label for="animations">Animation</label>
         <select id="animations">
             <option value="in_out">in out</option>
             <option value="up_down">up down</option>
             <option value="spin">spin</option>
+            <option value="scroll">scroll</option>
         </select>
     </div>
-    <form id="in_out_opts">
+    <div id="in_out_opts">
         <div>
             <label for="in_out_min">Min</label>
             <input name="in_out_min" id="in_out_min" type="number" />
@@ -30,8 +43,8 @@
             <label for="in_out_max">Max</label>
             <input id="in_out_max" type="number" />
         </div>
-    </form>
-    <form id="up_down_opts" hidden>
+    </div>
+    <div id="up_down_opts" hidden>
         <div>
             <label for="up_down_min">Min</label>
             <input id="up_down_min" type="number" />
@@ -40,19 +53,29 @@
             <label for="up_down_max">Max</label>
             <input id="up_down_max" type="number" />
         </div>
-    </form>
-    <form id="spin_opts" hidden>
-        <label for="spin_scale">Scale</label>
-        <input id="spin_scale" type="number" />
-    </form>
+    </div>
+    <div id="spin_opts" hidden></div>
+    <div id="scroll_opts" hidden>
+        <label for="scroll_dir">Direction</label>
+        <select id="scroll_dir">
+            <option value="left">left</option>
+            <option value="right">right</option>
+            <option value="up">up</option>
+            <option value="down">down</option>
+        </select>
+    </div>
     <h3>Result</h3>
     <div id="render_window"></div>
     <div>
         <label for="frame_rate">Frame rate</label>
         <input id="frame_rate" type="number" />
     </div>
+    <div>
+        <label for="scale_input">Scale</label>
+        <input id="scale_input" type="number" />
+    </div>
     <button id="save_gif">Save</button>
-    <script src="render.js"></script>
+    <script src="./src/render.js"></script>
 </body>
 
 </html>
