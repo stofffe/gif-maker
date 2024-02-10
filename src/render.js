@@ -154,17 +154,23 @@ function scroll_animation() {
     }
 }
 
+function load_default() {
+    tex = default_tex
+    tex_w = 200
+    tex_h = 200
+}
+
 function load_text(txt) {
     let fs = 52
     // Get dimensions
     textFont(font)
     textSize(fs)
+    textAlign(CENTER)
     let text_w = textWidth(txt)
     let text_h = textAscent()
 
     // Create text texture
-    let t = createGraphics(tex_w, text_h)
-    t.background(128) // temp
+    let t = createGraphics(text_w, text_h)
     t.textFont(font)
     t.textSize(fs)
     t.textAlign(CENTER)
@@ -174,12 +180,6 @@ function load_text(txt) {
     tex = t
     tex_w = text_w
     tex_h = text_h
-}
-
-function load_default() {
-    tex = default_tex
-    tex_w = 200
-    tex_h = 200
 }
 
 function load_image(file) {
