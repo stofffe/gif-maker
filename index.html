@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+</head>
+
+<body>
+    <h1>Make them gifs</h1>
+    <h3>Options</h3>
+    <div>
+        <label for="input">Input</label>
+        <input id="input" type="file" accept="image/jpeg, image/png" />
+    </div>
+    <div>
+        <label for="animations">Animation</label>
+        <select id="animations">
+            <option value="in_out">in out</option>
+            <option value="up_down">up down</option>
+            <option value="spin">spin</option>
+        </select>
+    </div>
+    <form id="in_out_opts">
+        <div>
+            <label for="in_out_min">Min</label>
+            <input name="in_out_min" id="in_out_min" type="number" />
+        </div>
+        <div>
+            <label for="in_out_max">Max</label>
+            <input id="in_out_max" type="number" />
+        </div>
+    </form>
+    <form id="up_down_opts" hidden>
+        <div>
+            <label for="up_down_min">Min</label>
+            <input id="up_down_min" type="number" />
+        </div>
+        <div>
+            <label for="up_down_max">Max</label>
+            <input id="up_down_max" type="number" />
+        </div>
+    </form>
+    <form id="spin_opts" hidden>
+        <label for="spin_scale">Scale</label>
+        <input id="spin_scale" type="number" />
+    </form>
+    <h3>Result</h3>
+    <div id="render_window"></div>
+    <div>
+        <label for="frame_rate">Frame rate</label>
+        <input id="frame_rate" type="number" />
+    </div>
+    <button id="save_gif">Save</button>
+    <script src="render.js"></script>
+</body>
+
+</html>
