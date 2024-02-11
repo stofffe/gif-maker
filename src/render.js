@@ -20,7 +20,7 @@ let global_scale_y = document.getElementById('global_scale_y')
 global_scale_x.value = 1
 global_scale_y.value = 1
 
-let animation_input = document.getElementById('animations')
+let animation_input = document.getElementById('animation_input')
 
 let input_type_input = document.getElementById('input_type')
 
@@ -35,6 +35,8 @@ let frameRateInput = document.getElementById('frame_rate')
 frameRateInput.value = 60
 
 let saveInput = document.getElementById('save_gif')
+
+let background_input = document.getElementById('background_input')
 
 let tex
 let tex_w
@@ -61,7 +63,8 @@ function setup() {
 }
 
 function draw() {
-    background(255)
+    let background_color = background_input.value
+    background(background_color)
 
     animate()
     scale(Number(global_scale_x.value), Number(global_scale_y.value))
@@ -76,16 +79,18 @@ function draw() {
 function animate() {
     let animation = animation_input.value
     switch (animation) {
-        case 'in_out':
+        case 'anim_static':
+            return
+        case 'anim_in_out':
             scale_animation()
             break
-        case 'up_down':
+        case 'anim_up_down':
             jump_animation()
             break
-        case 'spin':
+        case 'anim_spin':
             spin_animation()
             break
-        case 'scroll':
+        case 'anim_scroll':
             scroll_animation()
             break
         default:
@@ -256,16 +261,18 @@ animation_input.addEventListener('change', (e) => {
     spin_opts.setAttribute('hidden', true)
     scroll_opts.setAttribute('hidden', true)
     switch (animation) {
-        case 'in_out':
+        case 'anim_static':
+            return
+        case 'anim_in_out':
             in_out_opts.removeAttribute('hidden')
             break
-        case 'up_down':
+        case 'anim_up_down':
             up_down_opts.removeAttribute('hidden')
             break
-        case 'spin':
+        case 'anim_spin':
             spin_opts.removeAttribute('hidden')
             break
-        case 'scroll':
+        case 'anim_scroll':
             scroll_opts.removeAttribute('hidden')
             break
         default:
