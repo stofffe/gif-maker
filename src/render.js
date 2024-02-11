@@ -30,7 +30,7 @@ let background_input = document.getElementById('background_input')
 background_input.value = '#ffffff'
 
 // Input/Animation types
-let input_type_input = document.getElementById('input_type')
+let type_input = document.getElementById('input_type')
 let animation_input = document.getElementById('animation_input')
 
 let image_input_opts = document.getElementById('image_input_opts')
@@ -50,7 +50,9 @@ let tex
 let tex_w
 let tex_h
 let default_tex
+
 let font
+let default_font
 
 let canvas
 let dim_x = 200
@@ -59,10 +61,11 @@ let dim_y = 200
 // P5.js
 
 function preload() {
-    default_tex = loadImage('https://pixijs.com/assets/bunny.png')
-    load_default()
+    default_tex = loadImage('assets/default_img.png')
+    default_font = loadFont('assets/default_font.ttf')
 
-    font = loadFont('assets/font.ttf')
+    load_default_image()
+    load_default_font()
 }
 
 function setup() {
@@ -177,13 +180,16 @@ function scroll_animation() {
     }
 }
 
-function load_default() {
+function load_default_image() {
     tex = default_tex
     tex_w = 200
     tex_h = 200
 }
+function load_default_font() {
+    font = default_font
+}
 
-function load_text() {
+function generate_text() {
     let txt = text_input.value
     let fs = 80
     // Get dimensions
@@ -207,16 +213,37 @@ function load_text() {
     tex_h = text_h
 }
 
+function load_font(file) {
+    let reader = new FileReader()
+    reader.onload = function() {
+        loadFont(
+            reader.result,
+            (fnt) => {
+                font = fnt
+                generate_text()
+            },
+            (err) => {
+                console.error('could not load font', err)
+            },
+        )
+    }
+    reader.readAsDataURL(file)
+}
+
 function load_image(file) {
     let reader = new FileReader()
     reader.onload = function() {
-        let img = new Image()
-        img.src = reader.result
-        img.onload = function() {
-            tex = loadImage(img.src)
-            tex_w = img.width
-            tex_h = img.height
-        }
+        loadImage(
+            reader.result,
+            (img) => {
+                tex = img
+                tex_w = img.width
+                tex_h = img.height
+            },
+            (err) => {
+                console.log('could not load image', err)
+            },
+        )
     }
     reader.readAsDataURL(file)
 }
@@ -233,19 +260,7 @@ function save_gif() {
 
 // Callbacks
 
-text_input.addEventListener('keyup', (e) => {
-    load_text()
-})
-image_input.addEventListener('change', (e) => {
-    let files = e.target.files
-    if (files.length == 0) {
-        tex = null
-        return
-    }
-    load_image(files[0])
-})
-
-input_type_input.addEventListener('change', (e) => {
+type_input.addEventListener('change', (e) => {
     let input_type = e.target.value
     image_input_opts.setAttribute('hidden', true)
     text_input_opts.setAttribute('hidden', true)
@@ -257,21 +272,25 @@ input_type_input.addEventListener('change', (e) => {
             if (files.length > 0) {
                 load_image(files[0])
             } else {
-                load_default()
+                load_default_image()
             }
             break
         case 'text':
             text_input_opts.removeAttribute('hidden')
             let txt = text_input.value
-            load_text(txt)
+            generate_text(txt)
             break
         default:
             console.error('invalid input type')
     }
 })
-
-text_color.addEventListener('change', (e) => {
-    load_text()
+image_input.addEventListener('change', (e) => {
+    let files = e.target.files
+    if (files.length == 0) {
+        tex = default_tex
+        return
+    }
+    load_image(files[0])
 })
 
 animation_input.addEventListener('change', (e) => {
@@ -299,6 +318,23 @@ animation_input.addEventListener('change', (e) => {
         default:
             console.error('invalid animation')
     }
+})
+
+text_font.addEventListener('change', (e) => {
+    let files = e.target.files
+    if (files.length == 0) {
+        load_default_font()
+        generate_text()
+        return
+    }
+    load_font(files[0])
+    /* font = loadFont('assets/font2.otf') */
+})
+text_input.addEventListener('keyup', () => {
+    generate_text()
+})
+text_color.addEventListener('change', () => {
+    generate_text()
 })
 
 // Record Gif
