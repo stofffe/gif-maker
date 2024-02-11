@@ -9,22 +9,36 @@
 <body>
     <h1>Make them gifs</h1>
     <h3>Input</h3>
+    <!-- input -->
     <div>
         <select id="input_type">
             <option value="image">Image</option>
             <option value="text">Text</option>
         </select>
     </div>
+    <!-- image -->
     <div id="image_input_opts">
-        <label for="image_input">Input</label>
+        <label for="image_input">File</label>
         <input id="image_input" type="file" accept="image/jpeg, image/png, image/gif" />
     </div>
+    <!-- text -->
     <div id="text_input_opts" hidden>
-        <label for="text_input">Input</label>
-        <input id="text_input" type="text" />
+        <div>
+            <label for="text_input">Text</label>
+            <input id="text_input" type="text" />
+        </div>
+        <div>
+            <label for="text_font_input">Font</label>
+            <input id="text_font_input" type="file" />
+        </div>
+        <div>
+            <label for="text_color_input">Color</label>
+            <input id="text_color_input" type="color" />
+        </div>
     </div>
 
     <h3>Options</h3>
+    <!-- animation -->
     <div>
         <label for="animation_input">Animation</label>
         <select id="animation_input">
@@ -35,27 +49,37 @@
             <option value="anim_scroll">scroll</option>
         </select>
     </div>
-    <div id="in_out_opts">
+    <!-- in out -->
+    <div id="in_out_opts" hidden>
         <div>
             <label for="in_out_min">Min</label>
-            <input id="in_out_min" type="number" step="0.1" />
+            <input id="in_out_min" type="number" step="0.1" min="0" />
         </div>
         <div>
             <label for="in_out_max">Max</label>
             <input id="in_out_max" type="number" step="0.1" />
         </div>
     </div>
+    <!-- up down -->
     <div id="up_down_opts" hidden>
         <div>
             <label for="up_down_min">Min</label>
-            <input id="up_down_min" type="number" step="0.1" />
+            <input id="up_down_min" type="number" step="0.1" min="0" />
         </div>
         <div>
             <label for="up_down_max">Max</label>
             <input id="up_down_max" type="number" step="0.1" />
         </div>
     </div>
-    <div id="spin_opts" hidden></div>
+    <!-- spin -->
+    <div id="spin_opts" hidden>
+        <label for="spin_direction">Direction</label>
+        <select id="spin_direction">
+            <option value="clockwise">clockwise</option>
+            <option value="counter_clockwise">counter clockwise</option>
+        </select>
+    </div>
+    <!-- scroll -->
     <div id="scroll_opts" hidden>
         <label for="scroll_dir">Direction</label>
         <select id="scroll_dir">
@@ -67,10 +91,12 @@
     </div>
     <h3>Result</h3>
     <div id="render_window"></div>
+    <!-- frame rate -->
     <div>
         <label for="frame_rate">Frame rate</label>
         <input id="frame_rate" type="number" />
     </div>
+    <!-- scale -->
     <div>
         <label for="global_scale_x">scale x</label>
         <input id="global_scale_x" type="number" step="0.1" />
@@ -79,6 +105,7 @@
         <label for="global_scale_y">scale y</label>
         <input id="global_scale_y" type="number" step="0.1" />
     </div>
+    <!-- background color -->
     <div>
         <label for="background_input">Background color</label>
         <input id="background_input" type="color" />

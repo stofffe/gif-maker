@@ -1,3 +1,4 @@
+// Animation options
 let in_out_opts = document.getElementById('in_out_opts')
 let in_out_min = document.getElementById('in_out_min')
 let in_out_max = document.getElementById('in_out_max')
@@ -11,18 +12,26 @@ up_down_min.value = 0.2
 up_down_max.value = 1.0
 
 let spin_opts = document.getElementById('spin_opts')
+let spin_direction = document.getElementById('spin_direction')
 
 let scroll_opts = document.getElementById('scroll_opts')
 let scroll_direction = document.getElementById('scroll_dir')
+
+// Global opts
+let framerate_input = document.getElementById('frame_rate')
+framerate_input.value = 60
 
 let global_scale_x = document.getElementById('global_scale_x')
 let global_scale_y = document.getElementById('global_scale_y')
 global_scale_x.value = 1
 global_scale_y.value = 1
 
-let animation_input = document.getElementById('animation_input')
+let background_input = document.getElementById('background_input')
+background_input.value = '#ffffff'
 
+// Input/Animation types
 let input_type_input = document.getElementById('input_type')
+let animation_input = document.getElementById('animation_input')
 
 let image_input_opts = document.getElementById('image_input_opts')
 let image_input = document.getElementById('image_input')
@@ -30,13 +39,12 @@ let image_input = document.getElementById('image_input')
 let text_input_opts = document.getElementById('text_input_opts')
 let text_input = document.getElementById('text_input')
 text_input.value = 'hello'
+let text_font = document.getElementById('text_font_input')
+let text_color = document.getElementById('text_color_input')
 
-let frameRateInput = document.getElementById('frame_rate')
-frameRateInput.value = 60
+// Gif
 
 let saveInput = document.getElementById('save_gif')
-
-let background_input = document.getElementById('background_input')
 
 let tex
 let tex_w
@@ -99,7 +107,7 @@ function animate() {
 }
 
 function scale_animation() {
-    let framerate = Number(frameRateInput.value)
+    let framerate = Number(framerate_input.value)
     let animation_speed = (2 * PI) / framerate
 
     let min_size = Number(in_out_min.value)
@@ -110,29 +118,37 @@ function scale_animation() {
 }
 
 function jump_animation() {
-    let framerate = Number(frameRateInput.value)
+    let framerate = Number(framerate_input.value)
     let animation_speed = (2 * PI) / framerate
 
     let min_size = Number(up_down_min.value)
     let max_size = Number(up_down_max.value)
+
     let diff = (max_size - min_size) / 2
-    let s = diff + diff * cos(animation_speed * frameCount) + min_size
-    translate(0, height / 2)
-    scale(1, s)
-    translate(0, -height / 2)
+    let h = diff + diff * cos(animation_speed * frameCount) + min_size
+
+    let scaled_y = tex_h * global_scale_y.value * h
+    let d = (height - scaled_y) / 2
+
+    translate(0, d)
+    scale(1, h)
 }
 
 function spin_animation() {
-    let framerate = Number(frameRateInput.value)
+    let framerate = Number(framerate_input.value)
     let animation_speed = (2 * PI) / framerate
 
     let angle = animation_speed * frameCount
+    if (spin_direction.value == 'counter_clockwise') {
+        angle = -angle
+    }
+
     rotate(angle)
 }
 
 function scroll_animation() {
     let direction = scroll_direction.value
-    let framerate = Number(frameRateInput.value)
+    let framerate = Number(framerate_input.value)
 
     if ((direction == 'left') | (direction == 'right')) {
         let left = -width / 2 - (tex_w * Number(global_scale_x.value)) / 2
@@ -167,8 +183,9 @@ function load_default() {
     tex_h = 200
 }
 
-function load_text(txt) {
-    let fs = 52
+function load_text() {
+    let txt = text_input.value
+    let fs = 80
     // Get dimensions
     textFont(font)
     textSize(fs)
@@ -178,6 +195,7 @@ function load_text(txt) {
 
     // Create text texture
     let t = createGraphics(text_w, text_h)
+    t.fill(text_color.value)
     t.textFont(font)
     t.textSize(fs)
     t.textAlign(CENTER)
@@ -205,7 +223,7 @@ function load_image(file) {
 
 function save_gif() {
     frameCount = 0
-    let frames = Number(frameRateInput.value)
+    let frames = Number(framerate_input.value)
     let options = {
         units: 'frames',
         delay: 0,
@@ -216,8 +234,7 @@ function save_gif() {
 // Callbacks
 
 text_input.addEventListener('keyup', (e) => {
-    let txt = e.target.value
-    load_text(txt)
+    load_text()
 })
 image_input.addEventListener('change', (e) => {
     let files = e.target.files
@@ -251,6 +268,10 @@ input_type_input.addEventListener('change', (e) => {
         default:
             console.error('invalid input type')
     }
+})
+
+text_color.addEventListener('change', (e) => {
+    load_text()
 })
 
 animation_input.addEventListener('change', (e) => {
