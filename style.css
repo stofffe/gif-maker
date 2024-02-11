@@ -1,0 +1,23 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+}
+
+#render_window {
+	border-style: solid;
+	width: fit-content;
+	height: fit-content;
+}
