@@ -250,7 +250,7 @@ function load_image(file) {
 
 function save_gif() {
     frameCount = 0
-    let frames = Number(animation_speed.value)
+    let frames = anim_speed_to_frames()
     let options = {
         units: 'frames',
         delay: 0,
