@@ -163,6 +163,15 @@ input_text_color_el.addEventListener('change', (e) => {
     regenerate_text()
 })
 
+// input text font size
+let input_text_fontsize = 52
+let input_text_fontsize_el = document.getElementById("input_text_fontsize")
+input_text_fontsize_el.value = input_text_fontsize
+input_text_fontsize_el.addEventListener("change", (e)=> {
+    input_text_fontsize = Number(e.target.value)
+    regenerate_text()
+})
+
 /* let type_input = document.getElementById('input_type') */
 let animation_type = 'static'
 let animation_type_el = document.getElementById('anim_type')
@@ -320,10 +329,9 @@ function scroll_animation() {
 // regenerates text texture
 function regenerate_text() {
     let txt = input_text
-    let fs = 80
+    let fs = input_text_fontsize
 
     // Get dimensions
-    console.log(font)
     textFont(font)
     textSize(fs)
     textAlign(CENTER)
@@ -396,7 +404,7 @@ function export_gif() {
     let options = {
         units: 'frames',
         delay: 0,
-        frameDelay: 200,
+        frameDelay: 1 / anim_frames, // TODO add input box for this
     }
     saveGif('test', frames, options)
 }
