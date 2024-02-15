@@ -4,6 +4,8 @@
 
 <head>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+    <!-- <script src="vendor/libs/p5.min.js"></script> -->
+    <!-- <script src="vendor/libs/p5.js"></script> -->
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -19,72 +21,72 @@
             </select>
         </div>
         <!-- image -->
-        <div id="image_input_opts">
-            <label for="image_input">File</label>
-            <input id="image_input" type="file" accept="image/jpeg, image/png, image/gif" />
+        <div id="input_image_opts">
+            <label for="input_image">File</label>
+            <input id="input_image" type="file" accept="image/jpeg, image/png, image/gif" />
         </div>
         <!-- text -->
-        <div id="text_input_opts" hidden>
+        <div id="input_text_opts" hidden>
             <div>
-                <label for="text_input">Text</label>
-                <input id="text_input" type="text" />
+                <label for="input_text">Text</label>
+                <input id="input_text" type="text" />
             </div>
             <div>
-                <label for="text_font_input">Font</label>
-                <input id="text_font_input" type="file" />
+                <label for="input_text_font">Font</label>
+                <input id="input_text_font" type="file" />
             </div>
             <div>
-                <label for="text_color_input">Color</label>
-                <input id="text_color_input" type="color" />
+                <label for="input_text_color">Color</label>
+                <input id="input_text_color" type="color" />
             </div>
         </div>
 
         <h3>Options</h3>
         <!-- animation -->
         <div>
-            <label for="animation_input">Animation</label>
-            <select id="animation_input">
-                <option value="anim_static">static</option>
-                <option value="anim_in_out">in out</option>
-                <option value="anim_up_down">up down</option>
-                <option value="anim_spin">spin</option>
-                <option value="anim_scroll">scroll</option>
+            <label for="anim_type">Animation</label>
+            <select id="anim_type">
+                <option value="static">static</option>
+                <option value="inout">in out</option>
+                <option value="updown">up down</option>
+                <option value="spin">spin</option>
+                <option value="scroll">scroll</option>
             </select>
         </div>
-        <!-- in out -->
-        <div id="in_out_opts" hidden>
+        <!-- inout -->
+        <div id="anim_inout_opts" hidden>
             <div>
-                <label for="in_out_min">Min</label>
-                <input id="in_out_min" type="number" step="0.1" min="0" />
+                <label for="anim_inout_min">Min</label>
+                <input id="anim_inout_min" type="number" step="0.1" min="0" />
             </div>
             <div>
-                <label for="in_out_max">Max</label>
-                <input id="in_out_max" type="number" step="0.1" />
+                <label for="anim_inout_max">Max</label>
+                <input id="anim_inout_max" type="number" step="0.1" />
             </div>
         </div>
         <!-- up down -->
-        <div id="up_down_opts" hidden>
+        <div id="anim_updown_opts" hidden>
             <div>
-                <label for="up_down_min">Min</label>
-                <input id="up_down_min" type="number" step="0.1" min="0" />
+                <label for="anim_updown_min">Min</label>
+                <input id="anim_updown_min" type="number" step="0.1" min="0" />
             </div>
             <div>
-                <label for="up_down_max">Max</label>
-                <input id="up_down_max" type="number" step="0.1" />
+                <label for="anim_updown_max">Max</label>
+                <input id="anim_updown_max" type="number" step="0.1" />
             </div>
         </div>
         <!-- spin -->
-        <div id="spin_opts" hidden>
-            <label for="spin_direction">Direction</label>
-            <select id="spin_direction">
+        <div id="anim_spin_opts" hidden>
+            <label for="anim_spin_dir">Direction</label>
+            <select id="anim_spin_dir">
                 <option value="clockwise">clockwise</option>
                 <option value="counter_clockwise">counter clockwise</option>
             </select>
         </div>
         <!-- scroll -->
-        <div id="scroll_opts" hidden>
-            <label for="scroll_dir">Direction</label>
-            <select id="scroll_dir">
+        <div id="anim_scroll_opts" hidden>
+            <label for="anim_scroll_dir">Direction</label>
+            <select id="anim_scroll_dir">
                 <option value="left">left</option>
                 <option value="right">right</option>
                 <option value="up">up</option>
@@ -95,25 +97,33 @@
         <div id="render_window"></div>
         <!-- frame rate -->
         <div>
-            <label for="animation_speed">Animation speed</label>
-            <input id="animation_speed" type="number" step="0.1" min="0" />
+            <label for="anim_frames">Animation frames</label>
+            <input id="anim_frames" type="number" step="0.1" min="0" />
         </div>
         <!-- scale -->
         <div>
-            <label for="global_scale_x">scale x</label>
-            <input id="global_scale_x" type="number" step="0.1" />
+            <label for="scale_x">scale x</label>
+            <input id="scale_x" type="number" step="0.1" />
         </div>
         <div>
-            <label for="global_scale_y">scale y</label>
-            <input id="global_scale_y" type="number" step="0.1" />
+            <label for="scale_y">scale y</label>
+            <input id="scale_y" type="number" step="0.1" />
         </div>
         <!-- background color -->
         <div>
-            <label for="background_input">Background color</label>
-            <input id="background_input" type="color" />
+            <label for="background_color">Background color</label>
+            <input id="background_color" type="color" />
         </div>
+        <!-- <div> -->
+        <!--     <label for="export_size_x">Export size x</label> -->
+        <!--     <input id="export_size_x" type="number" step="10" /> -->
+        <!-- </div> -->
+        <!-- <div> -->
+        <!--     <label for="export_size_y">Eyport size y</label> -->
+        <!--     <input id="export_size_y" type="number" step="10" /> -->
+        <!-- </div> -->
         <div>
-            <button id="save_gif">Save</button>
+            <button id="export_gif">Save</button>
         </div>
         <script src="./src/render.js"></script>
     </div>

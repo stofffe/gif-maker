@@ -1,51 +1,4 @@
-// Animation options
-let in_out_opts = document.getElementById('in_out_opts')
-let in_out_min = document.getElementById('in_out_min')
-let in_out_max = document.getElementById('in_out_max')
-in_out_min.value = 0.2
-in_out_max.value = 1.0
-
-let up_down_opts = document.getElementById('up_down_opts')
-let up_down_min = document.getElementById('up_down_min')
-let up_down_max = document.getElementById('up_down_max')
-up_down_min.value = 0.2
-up_down_max.value = 1.0
-
-let spin_opts = document.getElementById('spin_opts')
-let spin_direction = document.getElementById('spin_direction')
-
-let scroll_opts = document.getElementById('scroll_opts')
-let scroll_direction = document.getElementById('scroll_dir')
-
-// Global opts
-let animation_speed = document.getElementById('animation_speed')
-animation_speed.value = 1
-
-let global_scale_x = document.getElementById('global_scale_x')
-let global_scale_y = document.getElementById('global_scale_y')
-global_scale_x.value = 1
-global_scale_y.value = 1
-
-let background_input = document.getElementById('background_input')
-background_input.value = '#ffffff'
-
-// Input/Animation types
-let type_input = document.getElementById('input_type')
-let animation_input = document.getElementById('animation_input')
-
-let image_input_opts = document.getElementById('image_input_opts')
-let image_input = document.getElementById('image_input')
-
-let text_input_opts = document.getElementById('text_input_opts')
-let text_input = document.getElementById('text_input')
-text_input.value = 'hello'
-let text_font = document.getElementById('text_font_input')
-let text_color = document.getElementById('text_color_input')
-
-// Gif
-
-let saveInput = document.getElementById('save_gif')
-
+// Global
 let tex
 let tex_w
 let tex_h
@@ -55,8 +8,197 @@ let font
 let default_font
 
 let canvas
-let dim_x = 200
-let dim_y = 200
+let canvas_width = 100
+let canvas_height = 100
+
+// Animations
+
+// anim inout
+let anim_inout_min = 0.2
+let anim_inout_max = 1.0
+let anim_inout_opts_el = document.getElementById('anim_inout_opts')
+let anim_inout_min_el = document.getElementById('anim_inout_min')
+let anim_inout_max_el = document.getElementById('anim_inout_max')
+anim_inout_min_el.value = anim_inout_min
+anim_inout_max_el.value = anim_inout_max
+anim_inout_min_el.addEventListener('change', (e) => {
+    anim_inout_min = Number(e.target.value)
+})
+anim_inout_max_el.addEventListener('change', (e) => {
+    anim_inout_max = Number(e.target.value)
+})
+
+// anim updown
+let anim_updown_min = 0.2
+let anim_updown_max = 1.0
+let anim_updown_opts_el = document.getElementById('anim_updown_opts')
+let anim_updown_min_el = document.getElementById('anim_updown_min')
+let anim_updown_max_el = document.getElementById('anim_updown_max')
+anim_updown_min_el.value = anim_updown_min
+anim_updown_max_el.value = anim_updown_max
+
+anim_updown_min_el.addEventListener('change', (e) => {
+    anim_updown_min = Number(e.target.value)
+})
+anim_updown_max_el.addEventListener('change', (e) => {
+    anim_updown_max = Number(e.target.value)
+})
+
+// anim spin
+let anim_spin_dir = 'clockwise'
+let anim_spin_opts_el = document.getElementById('anim_spin_opts')
+let anim_spin_dir_el = document.getElementById('anim_spin_dir')
+anim_spin_dir_el.value = anim_spin_dir
+anim_spin_dir_el.addEventListener('change', (e) => {
+    anim_spin_dir = e.target.value
+})
+
+// anim scroll
+let anim_scroll_dir = 'left'
+let anim_scroll_opts_el = document.getElementById('anim_scroll_opts')
+let anim_scroll_dir_el = document.getElementById('anim_scroll_dir')
+anim_scroll_dir_el.value = anim_scroll_dir
+anim_scroll_dir_el.addEventListener('change', (e) => {
+    anim_scroll_dir = e.target.value
+})
+
+// anim speed
+let anim_frames = 60
+let anim_frames_el = document.getElementById('anim_frames')
+anim_frames_el.value = anim_frames
+anim_frames_el.addEventListener('change', (e) => {
+    anim_frames = 60 * (1 / Number(e.target.value))
+})
+
+// scale
+let scale_x = 1
+let scale_y = 1
+let scale_x_el = document.getElementById('scale_x')
+let scale_y_el = document.getElementById('scale_y')
+scale_x_el.value = scale_x
+scale_y_el.value = scale_y
+scale_x_el.addEventListener('change', (e) => {
+    scale_x = Number(e.target.value)
+})
+scale_y_el.addEventListener('change', (e) => {
+    scale_y = Number(e.target.value)
+})
+
+// background color
+let background_color = '#ffffff'
+let background_color_el = document.getElementById('background_color')
+background_color_el.value = background_color
+background_color_el.addEventListener('change', (e) => {
+    background_color = e.target.value
+})
+
+// input type
+let input_type = 'image'
+let input_type_el = document.getElementById('input_type')
+let input_image_opts_el = document.getElementById('input_image_opts')
+let input_text_opts_el = document.getElementById('input_text_opts')
+input_type_el.addEventListener('change', (e) => {
+    input_type = e.target.value
+
+    input_image_opts_el.setAttribute('hidden', true)
+    input_text_opts_el.setAttribute('hidden', true)
+
+    switch (input_type) {
+        case 'image':
+            input_image_opts_el.removeAttribute('hidden')
+            let files = input_image
+            if (files.length > 0) {
+                load_image(files[0])
+            } else {
+                load_default_image()
+            }
+            break
+        case 'text':
+            input_text_opts_el.removeAttribute('hidden')
+            let txt = input_text
+            regenerate_text(txt)
+            break
+        default:
+            console.error('invalid input type')
+    }
+})
+
+// input image
+let input_image_el = document.getElementById('input_image')
+input_image_el.addEventListener('change', (e) => {
+    let files = e.target.files
+    if (files.length == 0) {
+        tex = default_tex
+        return
+    }
+    load_image(files[0])
+})
+
+// input text
+let input_text = 'hello'
+let input_text_el = document.getElementById('input_text')
+input_text_el.value = input_text
+input_text_el.addEventListener('keyup', (e) => {
+    input_text = e.target.value
+    regenerate_text()
+})
+
+// input text font
+let input_text_font_el = document.getElementById('input_text_font')
+input_text_font_el.addEventListener('change', (e) => {
+    let files = e.target.files
+    if (files.length == 0) {
+        load_default_font()
+        regenerate_text()
+        return
+    }
+    load_font(files[0])
+})
+
+// input text color
+let input_text_color = '#000000'
+let input_text_color_el = document.getElementById('input_text_color')
+input_text_color_el.addEventListener('change', (e) => {
+    input_text_color = e.target.value
+    regenerate_text()
+})
+
+/* let type_input = document.getElementById('input_type') */
+let animation_type = 'static'
+let animation_type_el = document.getElementById('anim_type')
+animation_type_el.value = animation_type
+animation_type_el.addEventListener('change', (e) => {
+    animation_type = e.target.value
+
+    anim_inout_opts_el.setAttribute('hidden', true)
+    anim_updown_opts_el.setAttribute('hidden', true)
+    anim_spin_opts_el.setAttribute('hidden', true)
+    anim_scroll_opts_el.setAttribute('hidden', true)
+    switch (animation_type) {
+        case 'static':
+            return
+        case 'inout':
+            anim_inout_opts_el.removeAttribute('hidden')
+            break
+        case 'updown':
+            anim_updown_opts_el.removeAttribute('hidden')
+            break
+        case 'spin':
+            anim_spin_opts_el.removeAttribute('hidden')
+            break
+        case 'scroll':
+            anim_scroll_opts_el.removeAttribute('hidden')
+            break
+        default:
+            console.error('invalid animation', animation_type)
+    }
+})
+
+// Gif
+let export_gif_el = document.getElementById('export_gif')
+export_gif_el.addEventListener('click', () => {
+    export_gif()
+})
 
 // P5.js
 
@@ -69,18 +211,18 @@ function preload() {
 }
 
 function setup() {
-    canvas = createCanvas(dim_x, dim_y, WEBGL)
+    canvas = createCanvas(canvas_width, canvas_height, WEBGL)
     canvas.parent('render_window')
 }
 
 function draw() {
-    let background_color = background_input.value
     background(background_color)
 
     animate()
-    scale(Number(global_scale_x.value), Number(global_scale_y.value))
+    scale(scale_x, scale_y)
 
     noStroke()
+
     texture(tex)
     plane(tex_w, tex_h)
 }
@@ -88,51 +230,46 @@ function draw() {
 // Animations
 
 function animate() {
-    let animation = animation_input.value
-    switch (animation) {
-        case 'anim_static':
+    switch (animation_type) {
+        case 'static':
             return
-        case 'anim_in_out':
-            scale_animation()
+        case 'inout':
+            inout_animation()
             break
-        case 'anim_up_down':
-            jump_animation()
+        case 'updown':
+            updown_animation()
             break
-        case 'anim_spin':
+        case 'spin':
             spin_animation()
             break
-        case 'anim_scroll':
+        case 'scroll':
             scroll_animation()
             break
         default:
-            console.error('invalid animation')
+            console.error('invalid animation', animation_type)
     }
 }
 
-function anim_speed_to_frames() {
-    return 60 * (1 / Number(animation_speed.value))
-}
+function inout_animation() {
+    let animation_speed = (2 * PI) / anim_frames
 
-function scale_animation() {
-    let animation_speed = (2 * PI) / anim_speed_to_frames()
-
-    let min_size = Number(in_out_min.value)
-    let max_size = Number(in_out_max.value)
+    let min_size = anim_inout_min
+    let max_size = anim_inout_max
     let diff = (max_size - min_size) / 2
     let s = diff + diff * cos(animation_speed * frameCount) + min_size
     scale(s, s)
 }
 
-function jump_animation() {
-    let animation_speed = (2 * PI) / anim_speed_to_frames()
+function updown_animation() {
+    let animation_speed = (2 * PI) / anim_frames
 
-    let min_size = Number(up_down_min.value)
-    let max_size = Number(up_down_max.value)
+    let min_size = anim_updown_min
+    let max_size = anim_updown_max
 
     let diff = (max_size - min_size) / 2
     let h = diff + diff * cos(animation_speed * frameCount) + min_size
 
-    let scaled_y = tex_h * global_scale_y.value * h
+    let scaled_y = tex_h * scale_y * h
     let d = (height - scaled_y) / 2
 
     translate(0, d)
@@ -140,10 +277,10 @@ function jump_animation() {
 }
 
 function spin_animation() {
-    let animation_speed = (2 * PI) / anim_speed_to_frames()
+    let animation_speed = (2 * PI) / anim_frames
 
     let angle = animation_speed * frameCount
-    if (spin_direction.value == 'counter_clockwise') {
+    if (anim_spin_dir == 'counter_clockwise') {
         angle = -angle
     }
 
@@ -151,12 +288,12 @@ function spin_animation() {
 }
 
 function scroll_animation() {
-    let direction = scroll_direction.value
+    let direction = anim_scroll_dir
 
     if ((direction == 'left') | (direction == 'right')) {
-        let left = -width / 2 - (tex_w * Number(global_scale_x.value)) / 2
-        let right = width / 2 + (tex_w * Number(global_scale_x.value)) / 2
-        let animation_speed = (right - left) / anim_speed_to_frames()
+        let left = -width / 2 - (tex_w * scale_x) / 2
+        let right = width / 2 + (tex_w * scale_x) / 2
+        let animation_speed = (right - left) / anim_frames
         let dist = (frameCount * animation_speed) % (right - left)
 
         if (direction == 'left') {
@@ -167,9 +304,9 @@ function scroll_animation() {
     }
 
     if ((direction == 'up') | (direction == 'down')) {
-        let top = -height / 2 - (tex_h * Number(global_scale_y.value)) / 2
-        let bottom = height / 2 + (tex_h * Number(global_scale_y.value)) / 2
-        let animation_speed = (bottom - top) / anim_speed_to_frames()
+        let top = -height / 2 - (tex_h * scale_y) / 2
+        let bottom = height / 2 + (tex_h * scale_y) / 2
+        let animation_speed = (bottom - top) / anim_frames
         let dist = (frameCount * animation_speed) % (bottom - top)
 
         if (direction == 'up') {
@@ -180,19 +317,13 @@ function scroll_animation() {
     }
 }
 
-function load_default_image() {
-    tex = default_tex
-    tex_w = 200
-    tex_h = 200
-}
-function load_default_font() {
-    font = default_font
-}
-
-function generate_text() {
-    let txt = text_input.value
+// regenerates text texture
+function regenerate_text() {
+    let txt = input_text
     let fs = 80
+
     // Get dimensions
+    console.log(font)
     textFont(font)
     textSize(fs)
     textAlign(CENTER)
@@ -201,35 +332,24 @@ function generate_text() {
 
     // Create text texture
     let t = createGraphics(text_w, text_h)
-    t.fill(text_color.value)
+    t.fill(input_text_color)
     t.textFont(font)
     t.textSize(fs)
     t.textAlign(CENTER)
     t.text(txt, text_w / 2, text_h)
 
-    // Update state
+    // Update texture
     tex = t
     tex_w = text_w
     tex_h = text_h
 }
 
-function load_font(file) {
-    let reader = new FileReader()
-    reader.onload = function() {
-        loadFont(
-            reader.result,
-            (fnt) => {
-                font = fnt
-                generate_text()
-            },
-            (err) => {
-                console.error('could not load font', err)
-            },
-        )
-    }
-    reader.readAsDataURL(file)
+// load image
+function load_default_image() {
+    tex = default_tex
+    tex_w = 100
+    tex_h = 100
 }
-
 function load_image(file) {
     let reader = new FileReader()
     reader.onload = function() {
@@ -248,96 +368,35 @@ function load_image(file) {
     reader.readAsDataURL(file)
 }
 
-function save_gif() {
+// load font
+function load_default_font() {
+    font = default_font
+}
+function load_font(file) {
+    let reader = new FileReader()
+    reader.onload = function() {
+        loadFont(
+            reader.result,
+            (fnt) => {
+                font = fnt
+                regenerate_text()
+            },
+            (err) => {
+                console.error('could not load font', err)
+            },
+        )
+    }
+    reader.readAsDataURL(file)
+}
+
+// export gif
+function export_gif() {
     frameCount = 0
-    let frames = anim_speed_to_frames()
+    let frames = anim_frames
     let options = {
         units: 'frames',
         delay: 0,
+        frameDelay: 200,
     }
     saveGif('test', frames, options)
 }
-
-// Callbacks
-
-type_input.addEventListener('change', (e) => {
-    let input_type = e.target.value
-    image_input_opts.setAttribute('hidden', true)
-    text_input_opts.setAttribute('hidden', true)
-
-    switch (input_type) {
-        case 'image':
-            image_input_opts.removeAttribute('hidden')
-            let files = image_input.files
-            if (files.length > 0) {
-                load_image(files[0])
-            } else {
-                load_default_image()
-            }
-            break
-        case 'text':
-            text_input_opts.removeAttribute('hidden')
-            let txt = text_input.value
-            generate_text(txt)
-            break
-        default:
-            console.error('invalid input type')
-    }
-})
-image_input.addEventListener('change', (e) => {
-    let files = e.target.files
-    if (files.length == 0) {
-        tex = default_tex
-        return
-    }
-    load_image(files[0])
-})
-
-animation_input.addEventListener('change', (e) => {
-    animation = e.target.value
-
-    in_out_opts.setAttribute('hidden', true)
-    up_down_opts.setAttribute('hidden', true)
-    spin_opts.setAttribute('hidden', true)
-    scroll_opts.setAttribute('hidden', true)
-    switch (animation) {
-        case 'anim_static':
-            return
-        case 'anim_in_out':
-            in_out_opts.removeAttribute('hidden')
-            break
-        case 'anim_up_down':
-            up_down_opts.removeAttribute('hidden')
-            break
-        case 'anim_spin':
-            spin_opts.removeAttribute('hidden')
-            break
-        case 'anim_scroll':
-            scroll_opts.removeAttribute('hidden')
-            break
-        default:
-            console.error('invalid animation')
-    }
-})
-
-text_font.addEventListener('change', (e) => {
-    let files = e.target.files
-    if (files.length == 0) {
-        load_default_font()
-        generate_text()
-        return
-    }
-    load_font(files[0])
-    /* font = loadFont('assets/font2.otf') */
-})
-text_input.addEventListener('keyup', () => {
-    generate_text()
-})
-text_color.addEventListener('change', () => {
-    generate_text()
-})
-
-// Record Gif
-saveInput.addEventListener('click', () => {
-    save_gif()
-})
