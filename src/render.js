@@ -63,11 +63,11 @@ anim_scroll_dir_el.addEventListener('change', (e) => {
 })
 
 // anim speed
-let anim_frames = 60
-let anim_frames_el = document.getElementById('anim_frames')
-anim_frames_el.value = anim_frames
-anim_frames_el.addEventListener('change', (e) => {
-    anim_frames = 60 * (1 / Number(e.target.value))
+let anim_speed = 50
+let anim_speed_el = document.getElementById('anim_speed')
+anim_speed_el.value = anim_speed
+anim_speed_el.addEventListener('change', (e) => {
+    anim_speed = Number(e.target.value)
 })
 
 // scale
@@ -165,9 +165,9 @@ input_text_color_el.addEventListener('change', (e) => {
 
 // input text font size
 let input_text_fontsize = 52
-let input_text_fontsize_el = document.getElementById("input_text_fontsize")
+let input_text_fontsize_el = document.getElementById('input_text_fontsize')
 input_text_fontsize_el.value = input_text_fontsize
-input_text_fontsize_el.addEventListener("change", (e)=> {
+input_text_fontsize_el.addEventListener('change', (e) => {
     input_text_fontsize = Number(e.target.value)
     regenerate_text()
 })
@@ -222,6 +222,7 @@ function preload() {
 function setup() {
     canvas = createCanvas(canvas_width, canvas_height, WEBGL)
     canvas.parent('render_window')
+    frameRate(anim_speed)
 }
 
 function draw() {
@@ -260,7 +261,7 @@ function animate() {
 }
 
 function inout_animation() {
-    let animation_speed = (2 * PI) / anim_frames
+    let animation_speed = (2 * PI) / anim_speed
 
     let min_size = anim_inout_min
     let max_size = anim_inout_max
@@ -270,7 +271,7 @@ function inout_animation() {
 }
 
 function updown_animation() {
-    let animation_speed = (2 * PI) / anim_frames
+    let animation_speed = (2 * PI) / anim_speed
 
     let min_size = anim_updown_min
     let max_size = anim_updown_max
@@ -286,7 +287,7 @@ function updown_animation() {
 }
 
 function spin_animation() {
-    let animation_speed = (2 * PI) / anim_frames
+    let animation_speed = (2 * PI) / anim_speed
 
     let angle = animation_speed * frameCount
     if (anim_spin_dir == 'counter_clockwise') {
@@ -302,7 +303,7 @@ function scroll_animation() {
     if ((direction == 'left') | (direction == 'right')) {
         let left = -width / 2 - (tex_w * scale_x) / 2
         let right = width / 2 + (tex_w * scale_x) / 2
-        let animation_speed = (right - left) / anim_frames
+        let animation_speed = (right - left) / anim_speed
         let dist = (frameCount * animation_speed) % (right - left)
 
         if (direction == 'left') {
@@ -315,7 +316,7 @@ function scroll_animation() {
     if ((direction == 'up') | (direction == 'down')) {
         let top = -height / 2 - (tex_h * scale_y) / 2
         let bottom = height / 2 + (tex_h * scale_y) / 2
-        let animation_speed = (bottom - top) / anim_frames
+        let animation_speed = (bottom - top) / anim_speed
         let dist = (frameCount * animation_speed) % (bottom - top)
 
         if (direction == 'up') {
@@ -400,11 +401,9 @@ function load_font(file) {
 // export gif
 function export_gif() {
     frameCount = 0
-    let frames = anim_frames
+    let frames = anim_speed
     let options = {
         units: 'frames',
-        delay: 0,
-        frameDelay: 1 / anim_frames, // TODO add input box for this
     }
     saveGif('test', frames, options)
 }
