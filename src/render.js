@@ -163,15 +163,6 @@ input_text_color_el.addEventListener('change', (e) => {
     regenerate_text()
 })
 
-// input text font size
-let input_text_fontsize = 52
-let input_text_fontsize_el = document.getElementById('input_text_fontsize')
-input_text_fontsize_el.value = input_text_fontsize
-input_text_fontsize_el.addEventListener('change', (e) => {
-    input_text_fontsize = Number(e.target.value)
-    regenerate_text()
-})
-
 /* let type_input = document.getElementById('input_type') */
 let animation_type = 'static'
 let animation_type_el = document.getElementById('anim_type')
@@ -330,14 +321,15 @@ function scroll_animation() {
 // regenerates text texture
 function regenerate_text() {
     let txt = input_text
-    let fs = input_text_fontsize
+    let fs = 52
 
     // Get dimensions
     textFont(font)
     textSize(fs)
-    textAlign(CENTER)
     let text_w = textWidth(txt)
-    let text_h = textAscent()
+    let asc = textAscent()
+    let des = textDescent()
+    let text_h = asc + des
 
     // Create text texture
     let t = createGraphics(text_w, text_h)
@@ -345,7 +337,7 @@ function regenerate_text() {
     t.textFont(font)
     t.textSize(fs)
     t.textAlign(CENTER)
-    t.text(txt, text_w / 2, text_h)
+    t.text(txt, text_w / 2, asc)
 
     // Update texture
     tex = t
