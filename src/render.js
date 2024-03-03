@@ -62,7 +62,7 @@ anim_scroll_dir_el.addEventListener('change', (e) => {
     anim_scroll_dir = e.target.value
 })
 
-// anim speed
+// frame count
 let frame_count = 50
 let frame_count_el = document.getElementById('frame_count')
 frame_count_el.value = frame_count
@@ -370,8 +370,8 @@ function regenerate_text() {
 // load image
 function load_default_image() {
     tex = default_tex
-    tex_w = 100
-    tex_h = 100
+    tex_w = canvas_width
+    tex_h = canvas_height
 }
 function load_image(file) {
     let reader = new FileReader()
@@ -380,8 +380,8 @@ function load_image(file) {
             reader.result,
             (img) => {
                 tex = img
-                tex_w = img.width
-                tex_h = img.height
+                tex_h = canvas_height
+                tex_w = (img.width / img.height) * canvas_width
             },
             (err) => {
                 console.log('could not load image', err)
