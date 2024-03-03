@@ -91,7 +91,7 @@ background_color_el.value = background_color
 background_color_el.addEventListener('change', (e) => {
     background_color = e.target.value
 })
-let background_color_switch = false
+let background_color_switch = true
 let background_color_switch_el = document.getElementById(
     'background_color_switch',
 )
