@@ -93,12 +93,6 @@ scale_y_el.addEventListener('change', (e) => {
 })
 
 // background color
-let background_color = '#ffffff'
-let background_color_el = document.getElementById('background_color')
-background_color_el.value = background_color
-background_color_el.addEventListener('change', (e) => {
-    background_color = e.target.value
-})
 let background_color_switch = true
 let background_color_switch_el = document.getElementById(
     'background_color_switch',
@@ -106,6 +100,18 @@ let background_color_switch_el = document.getElementById(
 background_color_switch_el.checked = background_color_switch
 background_color_switch_el.addEventListener('change', (e) => {
     background_color_switch = e.target.checked
+    if (e.target.checked) {
+        background_color_el.removeAttribute('hidden')
+    } else {
+        background_color_el.setAttribute('hidden', true)
+    }
+})
+let background_color = '#ffffff'
+let background_color_el = document.getElementById('background_color')
+background_color_el.value = background_color
+background_color_el.hidden = !background_color_switch
+background_color_el.addEventListener('change', (e) => {
+    background_color = e.target.value
 })
 
 // input type
