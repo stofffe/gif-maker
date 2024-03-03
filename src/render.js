@@ -91,6 +91,14 @@ background_color_el.value = background_color
 background_color_el.addEventListener('change', (e) => {
     background_color = e.target.value
 })
+let background_color_switch = false
+let background_color_switch_el = document.getElementById(
+    'background_color_switch',
+)
+background_color_switch_el.checked = background_color_switch
+background_color_switch_el.addEventListener('change', (e) => {
+    background_color_switch = e.target.checked
+})
 
 // input type
 let input_type = 'image'
@@ -213,11 +221,13 @@ function preload() {
 function setup() {
     canvas = createCanvas(canvas_width, canvas_height, WEBGL)
     canvas.parent('render_window')
-    frameRate(anim_speed)
 }
 
 function draw() {
-    background(background_color)
+    clear()
+    if (background_color_switch) {
+        background(background_color)
+    }
 
     animate()
     scale(scale_x, scale_y)
