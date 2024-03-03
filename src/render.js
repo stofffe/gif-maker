@@ -63,11 +63,19 @@ anim_scroll_dir_el.addEventListener('change', (e) => {
 })
 
 // anim speed
-let anim_speed = 50
-let anim_speed_el = document.getElementById('anim_speed')
-anim_speed_el.value = anim_speed
-anim_speed_el.addEventListener('change', (e) => {
-    anim_speed = Number(e.target.value)
+let frame_count = 50
+let frame_count_el = document.getElementById('frame_count')
+frame_count_el.value = frame_count
+frame_count_el.addEventListener('change', (e) => {
+    frame_count = Number(e.target.value)
+})
+
+// frame rate
+let frame_rate = 50
+let frame_rate_el = document.getElementById('frame_rate')
+frame_rate_el.value = frame_rate
+frame_rate_el.addEventListener('change', (e) => {
+    frame_rate = Number(e.target.value)
 })
 
 // scale
@@ -216,6 +224,8 @@ function preload() {
 
     load_default_image()
     load_default_font()
+
+    frameRate(frame_rate)
 }
 
 function setup() {
@@ -224,6 +234,8 @@ function setup() {
 }
 
 function draw() {
+    frameRate(frame_rate)
+
     clear()
     if (background_color_switch) {
         background(background_color)
@@ -262,7 +274,7 @@ function animate() {
 }
 
 function inout_animation() {
-    let animation_speed = (2 * PI) / anim_speed
+    let animation_speed = (2 * PI) / frame_count
 
     let min_size = anim_inout_min
     let max_size = anim_inout_max
@@ -272,7 +284,7 @@ function inout_animation() {
 }
 
 function updown_animation() {
-    let animation_speed = (2 * PI) / anim_speed
+    let animation_speed = (2 * PI) / frame_count
 
     let min_size = anim_updown_min
     let max_size = anim_updown_max
@@ -288,7 +300,7 @@ function updown_animation() {
 }
 
 function spin_animation() {
-    let animation_speed = (2 * PI) / anim_speed
+    let animation_speed = (2 * PI) / frame_count
 
     let angle = animation_speed * frameCount
     if (anim_spin_dir == 'counter_clockwise') {
@@ -304,7 +316,7 @@ function scroll_animation() {
     if ((direction == 'left') | (direction == 'right')) {
         let left = -width / 2 - (tex_w * scale_x) / 2
         let right = width / 2 + (tex_w * scale_x) / 2
-        let animation_speed = (right - left) / anim_speed
+        let animation_speed = (right - left) / frame_count
         let dist = (frameCount * animation_speed) % (right - left)
 
         if (direction == 'left') {
@@ -317,7 +329,7 @@ function scroll_animation() {
     if ((direction == 'up') | (direction == 'down')) {
         let top = -height / 2 - (tex_h * scale_y) / 2
         let bottom = height / 2 + (tex_h * scale_y) / 2
-        let animation_speed = (bottom - top) / anim_speed
+        let animation_speed = (bottom - top) / frame_count
         let dist = (frameCount * animation_speed) % (bottom - top)
 
         if (direction == 'up') {
@@ -403,7 +415,7 @@ function load_font(file) {
 // export gif
 function export_gif() {
     frameCount = 0
-    let frames = anim_speed
+    let frames = frame_count
     let options = {
         units: 'frames',
     }
