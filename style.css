@@ -6,14 +6,13 @@
 .content {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 1.5vh;
 }
 
 body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	min-height: 100vh;
 }
 
 #render_window {

@@ -3,13 +3,18 @@
 <html>
 
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
-    <!-- <script src="vendor/libs/p5.js"></script> -->
+    <meta name="author" content="Christoffer Andersson" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tool for creating animated gifs" />
+
+    <title>GIF maker</title>
     <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
 </head>
 
 <body>
-    <div class="content">
+    <main class="content">
         <h1>Make them gifs</h1>
         <h3>Input</h3>
         <!-- input -->
@@ -40,7 +45,7 @@
             </div>
         </div>
 
-        <h3>Options</h3>
+        <h3>Animation</h3>
         <!-- animation -->
         <div>
             <label for="anim_type">Animation</label>
@@ -92,16 +97,14 @@
                 <option value="down">down</option>
             </select>
         </div>
-        <h3>Result</h3>
-        <div id="render_window"></div>
-        <!-- frame rate -->
+
+        <h3>Options</h3>
+
+        <!-- background color -->
         <div>
-            <label for="frame_rate">Frame rate</label>
-            <input id="frame_rate" type="number" step="1" min="1" max="50" />
-        </div>
-        <div>
-            <label for="frame_count">Frame count</label>
-            <input id="frame_count" type="number" step="1" min="1" />
+            <input id="background_color_switch" type="checkbox" />
+            <label for="background_color">Background color</label>
+            <input id="background_color" type="color" />
         </div>
         <!-- scale -->
         <div>
@@ -112,17 +115,25 @@
             <label for="scale_y">scale y</label>
             <input id="scale_y" type="number" step="0.1" />
         </div>
-        <!-- background color -->
+        <!-- frame rate -->
         <div>
-            <input id="background_color_switch" type="checkbox" />
-            <label for="background_color">Background color</label>
-            <input id="background_color" type="color" />
+            <label for="frame_rate">Frame rate</label>
+            <input id="frame_rate" type="number" step="1" min="1" max="50" />
         </div>
+        <div>
+            <label for="frame_count">Frame count</label>
+            <input id="frame_count" type="number" step="1" min="1" />
+        </div>
+
+        <!-- result -->
+        <h3>Result</h3>
+        <div id="render_window"></div>
         <div>
             <button id="export_gif">Save</button>
         </div>
-        <script src="./src/render.js"></script>
-    </div>
+
+        <script src="src/render.js"></script>
+    </main>
 </body>
 
 </html>
