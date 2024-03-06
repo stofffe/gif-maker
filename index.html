@@ -19,6 +19,7 @@
         <h3>Input</h3>
         <!-- input -->
         <div>
+            <label for="input_type">Type</label>
             <select id="input_type">
                 <option value="image">Image</option>
                 <option value="text">Text</option>
@@ -60,22 +61,22 @@
         <!-- inout -->
         <div id="anim_inout_opts" hidden>
             <div>
-                <label for="anim_inout_min">Min</label>
+                <label for="anim_inout_min">Min size</label>
                 <input id="anim_inout_min" type="number" step="0.1" min="0" />
             </div>
             <div>
-                <label for="anim_inout_max">Max</label>
+                <label for="anim_inout_max">Max size</label>
                 <input id="anim_inout_max" type="number" step="0.1" />
             </div>
         </div>
         <!-- up down -->
         <div id="anim_updown_opts" hidden>
             <div>
-                <label for="anim_updown_min">Min</label>
+                <label for="anim_updown_min">Min size</label>
                 <input id="anim_updown_min" type="number" step="0.1" min="0" />
             </div>
             <div>
-                <label for="anim_updown_max">Max</label>
+                <label for="anim_updown_max">Max size</label>
                 <input id="anim_updown_max" type="number" step="0.1" />
             </div>
         </div>
@@ -108,12 +109,10 @@
         </div>
         <!-- scale -->
         <div>
-            <label for="scale_x">scale x</label>
-            <input id="scale_x" type="number" step="0.1" />
-        </div>
-        <div>
-            <label for="scale_y">scale y</label>
-            <input id="scale_y" type="number" step="0.1" />
+            <label for="scale_x">Width</label>
+            <input id="scale_x" type="number" step="0.1" min="0" max="10" />
+            <label for="scale_y">Height</label>
+            <input id="scale_y" type="number" step="0.1" min="0" max="10" />
         </div>
         <!-- frame rate -->
         <div>
@@ -122,7 +121,7 @@
         </div>
         <div>
             <label for="frame_count">Frame count</label>
-            <input id="frame_count" type="number" step="1" min="1" />
+            <input id="frame_count" type="number" step="1" min="1" max="1000" />
         </div>
 
         <!-- result -->
