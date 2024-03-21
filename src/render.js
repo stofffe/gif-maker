@@ -62,20 +62,29 @@ anim_scroll_dir_el.addEventListener('change', (e) => {
     anim_scroll_dir = e.target.value
 })
 
-// frame count
-let frame_count = 50
-let frame_count_el = document.getElementById('frame_count')
-frame_count_el.value = frame_count
-frame_count_el.addEventListener('change', (e) => {
-    frame_count = Number(e.target.value)
-})
-
-// frame rate
+let frame_speed = 50
 let frame_rate = 50
-let frame_rate_el = document.getElementById('frame_rate')
-frame_rate_el.value = frame_rate
-frame_rate_el.addEventListener('change', (e) => {
-    frame_rate = Number(e.target.value)
+let frame_count = 50
+let frame_speed_el = document.getElementById("frame_speed")
+frame_speed_el.value = frame_speed
+frame_speed_el.addEventListener("change", (e) => {
+    // clamp value
+    let fr = Number(e.target.value)
+    if (fr > 100) {
+        fr = 100
+    }
+    if (fr < 1) {
+        fr = 1
+    }
+
+    // set frame rate/count
+    frame_rate = 50
+    frame_count = 50
+    if (fr > 50) {
+        frame_count = 50 - (fr - 50) + 1
+    } else {
+        frame_rate = fr
+    }
 })
 
 // scale
